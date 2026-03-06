@@ -2,27 +2,69 @@
 
 <head>
     <link rel="stylesheet" href="style.css">
-    <title>Sip & Energize
-    </title>
+    <title>Sip & Energize</title>
 </head>
 
 <body>
+
+    <!-- Header -->
     <div class="header">
-        <img src="cup.png" alt="Sip & Energize Icon" width="64" height="64">
+        <img src="cup(1).png" width="50">
         <h1>Sip & Energize</h1>
+        <img src="grocery-store.png" class="cart-icon" width="30">
     </div>
+
+    <!-- Products -->
     <div class="content">
 
-        <img src="pipore.webp" alt="Pipore mate" width="429" height="429">
-        <p>
-            Pipore Yerba Mate 250G</p>
-        <p>
-            LE 150 EGP
+        <div class="product-card">
+            <img src="pipore2.jpeg" width="180" height="200">
+            <p>Pipore Yerba Mate 250G</p>
+            <p>150 EGP</p>
+            <button class="add-to-cart" onclick="openForm('Pipore 250G')">Buy Now</button>
+        </div>
 
-        </p>
-        <button class="add-to-cart" onclick="open_form()">Buy Now</button>
+        <div class="product-card">
+            <img src="images.jpeg" width="200">
+            <p>Sara Yerba Mate 1KG</p>
+            <p>300 EGP</p>
+            <button class="add-to-cart" onclick="openForm('Sara 1KG')">Buy Now</button>
+        </div>
+
+        <div class="product-card">
+            <img src="1.jpeg" width="200">
+            <p>Royale Yerba Mate 500G</p>
+            <p>200 EGP</p>
+            <button class="add-to-cart" onclick="openForm('Royale 500G')">Buy Now</button>
+        </div>
+
     </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay" onclick="closeForm()"></div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <h3>Complete Order</h3>
+        <p id="productName"></p>
+
+        <form onsubmit="submitOrder(event)">
+            <input type="text" placeholder="Full Name" required>
+            <input type="tel" placeholder="Phone Number" required>
+            <input type="text" placeholder="Address" required>
+
+            <button class="add-to-cart" type="submit">Confirm Order</button>
+        </form>
+
+        <br>
+        <button onclick="closeForm()">Cancel</button>
+    </div>
+
+    <!-- Include JavaScript for modal logic -->
     <script src="script.js"></script>
+
+
+
 
 </body>
 
