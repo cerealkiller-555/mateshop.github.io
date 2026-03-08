@@ -113,3 +113,28 @@ body {
     border: 1px solid #444;
     border-radius: 4px;
 }
+
+.icon-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+#order-form label {
+    display: block;
+    margin-top: 8px;
+}
+
+#order-form input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    background: #181818;
+    color: #f5f5f5;
+    border: 1px solid #444;
+    border-radius: 4px;
+}

@@ -1,79 +1,80 @@
-<html lang="en">
 <!DOCTYPE html>
-<meta charset="UTF-8">
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Sip & Energize</title>
 </head>
 
 <body>
-
-    <!-- Header -->
     <header>
         <div class="header">
-            <img src="cup(1).png" width="50">
+            <img src="images/cup(1).png" width="50" alt="Sip & Energize logo cup icon">
             <h1>Sip & Energize</h1>
-            <img src="shopping-bag(1).png" class="cart-icon" width="45">
+            <button id="cart-toggle" class="icon-button" type="button" aria-label="Toggle shopping cart">
+                <img src="images/shopping-bag(1).png" class="cart-icon" width="45" alt="Shopping cart icon">
+            </button>
         </div>
     </header>
+
     <main>
-        <div id="cart-panel"
-            style="display: none; padding: 15px; background-color: #232323; border-bottom: 1px solid #444;">
+        <section id="cart-panel"
+            style="display: none; padding: 15px; background-color: #232323; border-bottom: 1px solid #444;"
+            aria-live="polite">
             <h3>Shopping Cart</h3>
 
             <div id="form-section" style="display: none; margin-bottom: 20px; border: 1px solid #444; padding: 15px;">
-                <h4>Delivery Information</h4>
-                <form onsubmit="submitOrder(event)">
-                    <input type="text" placeholder="Full Name" name="fullName" required>
-                    <input type="tel" placeholder="Phone Number" name="phone" required>
-                    <input type="text" placeholder="Address" name="address" required>
+                <h4>Complete Your Order</h4>
+                <form id="order-form">
+                    <label for="fullName">Full Name</label>
+                    <input id="fullName" type="text" placeholder="Full Name" name="fullName" required>
+
+                    <label for="phone">Phone Number</label>
+                    <input id="phone" type="tel" placeholder="Phone Number" name="phone" required>
+
+                    <label for="address">Address</label>
+                    <input id="address" type="text" placeholder="Address" name="address" required>
+
                     <button class="add-to-cart" type="submit">Confirm Order</button>
-                    <button type="button" onclick="cancelOrder()"
+                    <button id="cancel-order" type="button"
                         style="background-color: #666; margin-top: 10px;">Cancel</button>
                 </form>
             </div>
 
-            <p id="cart-items">No items yet</p>
+            <div id="cart-items">
+                <p>No items yet</p>
+            </div>
             <p>Subtotal: <span id="subtotal">0</span> EGP</p>
-            <button class="submit-order" onclick="showCheckout()">Submit Order</button>
-        </div>
-        <!-- Products -->
-        <div class="content">
+            <button id="submit-order" class="add-to-cart" type="button">Checkout</button>
+        </section>
 
-            <div class="product-card">
-                <img src="pipore2.jpeg" name="Pipore 250G" width="180" height="200" price="150">
+        <section class="content">
+            <article class="product-card">
+                <img src="images/pipore2.jpeg" alt="Pipore Yerba Mate 250G package" width="180" height="200">
                 <p>Pipore Yerba Mate 250G</p>
                 <p>150 EGP</p>
-                <button class="add-to-cart" onclick="addToCart('Pipore 250G', 150)">Add to Cart</button>
-            </div>
+                <button class="add-to-cart js-add-to-cart" type="button" data-product="Pipore 250G">Add to Cart</button>
+            </article>
 
-            <div class="product-card">
-                <img src="images.jpeg" name="Sara 1KG" width="200">
+            <article class="product-card">
+                <img src="images/images.jpeg" alt="Sara Yerba Mate 1KG package" width="200" height="200">
                 <p>Sara Yerba Mate 1KG</p>
                 <p>300 EGP</p>
-                <button class="add-to-cart" onclick="addToCart('Sara 1KG', 300)">Add to Cart</button>
-            </div>
+                <button class="add-to-cart js-add-to-cart" type="button" data-product="Sara 1KG">Add to Cart</button>
+            </article>
 
-            <div class="product-card">
-                <img src="1.jpeg" name="Royale 500G" width="200" price="200">
+            <article class="product-card">
+                <img src="images/1.jpeg" alt="Royale Yerba Mate 500G package" width="200" height="200">
                 <p>Royale Yerba Mate 500G</p>
                 <p>200 EGP</p>
-                <button class="add-to-cart" onclick="addToCart('Royale 500G', 200)">Add to Cart</button>
-            </div>
-
-        </div>
+                <button class="add-to-cart js-add-to-cart" type="button" data-product="Royale 500G">Add to Cart</button>
+            </article>
+        </section>
     </main>
 
-    <!-- Overlay -->
-    <div id="overlay" class="overlay" onclick="closeForm()"></div>
-
-    <!-- Include JavaScript for modal logic -->
     <script src="script.js"></script>
-
-
-
-
 </body>
 
 </html>
