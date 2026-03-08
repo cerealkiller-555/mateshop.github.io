@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Sip & Energize</title>
 </head>
@@ -15,17 +18,16 @@
             <h1>Sip & Energize</h1>
             <button id="cart-toggle" class="icon-button" type="button" aria-label="Toggle shopping cart">
                 <img src="images/shopping-bag(1).png" class="cart-icon" width="45" alt="Shopping cart icon">
+                <span id="cart-count" aria-live="polite">0</span>
             </button>
         </div>
     </header>
 
     <main>
-        <section id="cart-panel"
-            style="display: none; padding: 15px; background-color: #232323; border-bottom: 1px solid #444;"
-            aria-live="polite">
+        <section id="cart-panel" aria-live="polite">
             <h3>Shopping Cart</h3>
 
-            <div id="form-section" style="display: none; margin-bottom: 20px; border: 1px solid #444; padding: 15px;">
+            <div id="form-section">
                 <h4>Complete Your Order</h4>
                 <form id="order-form">
                     <label for="fullName">Full Name</label>
@@ -38,8 +40,7 @@
                     <input id="address" type="text" placeholder="Address" name="address" required>
 
                     <button class="add-to-cart" type="submit">Confirm Order</button>
-                    <button id="cancel-order" type="button"
-                        style="background-color: #666; margin-top: 10px;">Cancel</button>
+                    <button id="cancel-order" type="button">Cancel</button>
                 </form>
             </div>
 
@@ -53,22 +54,22 @@
         <section class="content">
             <article class="product-card">
                 <img src="images/pipore2.jpeg" alt="Pipore Yerba Mate 250G package" width="180" height="200">
-                <p>Pipore Yerba Mate 250G</p>
-                <p>150 EGP</p>
+                <p class="product-title">Pipore Yerba Mate 250G</p>
+                <p class="product-price">150 EGP</p>
                 <button class="add-to-cart js-add-to-cart" type="button" data-product="Pipore 250G">Add to Cart</button>
             </article>
 
             <article class="product-card">
                 <img src="images/images.jpeg" alt="Sara Yerba Mate 1KG package" width="200" height="200">
-                <p>Sara Yerba Mate 1KG</p>
-                <p>300 EGP</p>
+                <p class="product-title">Sara Yerba Mate 1KG</p>
+                <p class="product-price">300 EGP</p>
                 <button class="add-to-cart js-add-to-cart" type="button" data-product="Sara 1KG">Add to Cart</button>
             </article>
 
             <article class="product-card">
                 <img src="images/1.jpeg" alt="Royale Yerba Mate 500G package" width="200" height="200">
-                <p>Royale Yerba Mate 500G</p>
-                <p>200 EGP</p>
+                <p class="product-title">Royale Yerba Mate 500G</p>
+                <p class="product-price">200 EGP</p>
                 <button class="add-to-cart js-add-to-cart" type="button" data-product="Royale 500G">Add to Cart</button>
             </article>
         </section>

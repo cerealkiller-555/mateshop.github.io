@@ -11,12 +11,13 @@ let formSection = document.getElementById("form-section");
 let orderForm = document.getElementById("order-form");
 let cartItems = document.getElementById("cart-items");
 let subtotal = document.getElementById("subtotal");
+let cartCount = document.getElementById("cart-count");
 
 function toggleCart() {
     let isHidden = cartPanel.style.display === "none" || cartPanel.style.display === "";
     cartPanel.style.display = isHidden ? "block" : "none";
 }
-function openCheckoutForm(params) {
+function openCheckoutForm() {
     if (cart.length === 0) {
         alert("Your cart is empty.");
         return;
@@ -52,6 +53,8 @@ function addToCart(productName) {
 
 function renderCart() {
     cartItems.innerHTML = "";
+    let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.innerText = String(totalQuantity);
 
     if (cart.length === 0) {
         cartItems.innerHTML = "<p>No items yet</p>";
@@ -64,41 +67,30 @@ function renderCart() {
     cart.forEach((item, index) => {
         let itemTotal = item.price * item.quantity;
         let row = document.createElement("div");
-        row.style.display = "flex";
-        row.style.justifyContent = "space-between";
-        row.style.alignItems = "center";
-        row.style.marginBottom = "10px";
-        row.style.padding = "10px";
-        row.style.backgroundColor = "#333";
-        row.style.borderRadius = "5px";
+        row.className = "cart-row";
         
         let itemInfo = document.createElement("span");
         itemInfo.innerText = `${item.name} = L.E ${itemTotal}`;
         
         let quantityControl = document.createElement("div");
-        quantityControl.style.display = "flex";
-        quantityControl.style.alignItems = "center";
-        quantityControl.style.gap = "8px";
+        quantityControl.className = "qty-control";
         
         let decreaseBtn = document.createElement("button");
+        decreaseBtn.type = "button";
         decreaseBtn.innerText = "-";
-        decreaseBtn.style.width = "30px";
-        decreaseBtn.style.height = "30px";
-        decreaseBtn.style.padding = "0";
-        decreaseBtn.style.cursor = "pointer";
+        decreaseBtn.className = "qty-btn";
+        decreaseBtn.setAttribute("aria-label", `Decrease quantity for ${item.name}`);
         decreaseBtn.addEventListener("click", () => decreaseQuantity(index));
         
         let qtyDisplay = document.createElement("span");
+        qtyDisplay.className = "qty-value";
         qtyDisplay.innerText = item.quantity;
-        qtyDisplay.style.minWidth = "30px";
-        qtyDisplay.style.textAlign = "center";
         
         let increaseBtn = document.createElement("button");
+        increaseBtn.type = "button";
         increaseBtn.innerText = "+";
-        increaseBtn.style.width = "30px";
-        increaseBtn.style.height = "30px";
-        increaseBtn.style.padding = "0";
-        increaseBtn.style.cursor = "pointer";
+        increaseBtn.className = "qty-btn";
+        increaseBtn.setAttribute("aria-label", `Increase quantity for ${item.name}`);
         increaseBtn.addEventListener("click", () => increaseQuantity(index));
         
         quantityControl.appendChild(decreaseBtn);
@@ -129,7 +121,9 @@ function decreaseQuantity(index) {
     renderCart();
 }
 
-function submitOrder() {
+function submitOrder(event) {
+    event.preventDefault();
+
     if (cart.length === 0) {
         alert("Your cart is empty.");
         return;
@@ -155,21 +149,12 @@ document.getElementById("cancel-order").addEventListener("click", closeForm);
 document.getElementById("submit-order").addEventListener("click", openCheckoutForm);
 orderForm.addEventListener("submit", submitOrder);
 
-// Add event listeners to product buttons - only once
-if (!window.addToCartListenersAttached) {
-    document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-        button.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            let productName = e.target.dataset.product;
-            addToCart(productName);
-        });
-    });
-    window.addToCartListenersAttached = true;
-}
-
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         addToCart(button.dataset.product);
     });
 });
+
+renderCart();
