@@ -22,12 +22,12 @@
 
     <section id="checkout-cart-summary" class="checkout-summary" aria-label="Order summary">
         <!-- Cart summary will be rendered here -->
-        <ul id="summary-list"></ul>
+        <ol id="summary-list"></ol>
         <p id="summary-total"></p>
 
     </section>
 
-    <form id="order-form">
+    <form class="modal" id="checkout-form" aria-label="Checkout form">
         <label for="fullName">Full Name</label>
         <input id="fullName" type="text" name="fullName" required>
 
@@ -37,7 +37,7 @@
         <label for="address">Address</label>
         <input id="address" type="text" name="address" required>
 
-        <button type="submit">Confirm Order</button>
+        <button type="submit" class="add-to-cart">Confirm Order</button>
     </form>
 
     <script src="script.js"></script>
