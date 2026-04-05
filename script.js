@@ -190,11 +190,19 @@ function submitOrder(event) {
     if (!orderForm) return;
 
     const fullName = orderForm.fullName.value.trim();
+    const email = orderForm.email.value.trim();
     const phone = orderForm.phone.value.trim();
     const address = orderForm.address.value.trim();
 
-    if (!fullName || !phone || !address) {
+    if (!fullName || !email || !phone || !address) {
         alert("Please fill in all fields.");
+        return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address.");
         return;
     }
 
