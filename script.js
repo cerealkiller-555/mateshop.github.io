@@ -78,6 +78,8 @@ function updateCartDisplay() {
         cartCount.innerText = totalItems;
     }
 
+    saveCart();
+
     if (!cartItems || !subtotal) return;
 
     cartItems.innerHTML = "";
@@ -85,7 +87,6 @@ function updateCartDisplay() {
     if (cart.length === 0) {
         cartItems.innerHTML = "<p>No items yet</p>";
         subtotal.innerText = "0";
-        saveCart();
         return;
     }
 
@@ -139,7 +140,6 @@ function updateCartDisplay() {
     });
 
     subtotal.innerText = totalPrice;
-    saveCart();
 }
 
 function renderCheckoutSummary() {
@@ -307,6 +307,7 @@ function init() {
     loadCart();
     updateCartDisplay();
     renderCheckoutSummary();
+    initOutsideClickListener();
 
     // Check if we are on checkout page and cart is empty
     let isCheckoutPage = !!document.getElementById("checkout-cart-summary");
