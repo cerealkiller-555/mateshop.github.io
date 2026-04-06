@@ -199,14 +199,36 @@ function submitOrder(event) {
         return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         alert("Please enter a valid email address.");
         return;
     }
 
-    alert("Order submitted successfully!");
+    const phoneRegex = /^[0-9\s\-\+\(\)]{10,}$/;
+    if (!phoneRegex.test(phone)) {
+        alert("Please enter a valid phone number (at least 10 digits).");
+        return;
+    }
+
+    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const orderData = {
+        fullName,
+        email,
+        phone,
+        address,
+        items: cart,
+        total: totalPrice,
+        orderDate: new Date().toISOString()
+    };
+
+    const orderHistory = JSON.parse(localStorage.getItem("orderHistory")) || [];
+    orderHistory.push(orderData);
+    localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
+
+    const orderId = "ORD-" + Date.now();
+    alert(`Order submitted successfully!\nOrder ID: ${orderId}\n\nWe'll send you an email confirmation at: ${email}`);
+
     cart = [];
     updateCartDisplay();
     if (orderForm) orderForm.reset();
@@ -217,7 +239,6 @@ function init() {
     loadCart();
     updateCartDisplay();
     renderCheckoutSummary();
-    // initOutsideClickListener(); // Removed to prevent cart from closing on outside click
 
     if (cartToggleButton) {
         cartToggleButton.addEventListener("click", (event) => {
@@ -238,6 +259,11 @@ function init() {
     if (orderForm) {
         orderForm.addEventListener("submit", submitOrder);
     }
+}
+
+// Retrieve order history from localStorage
+function getOrderHistory() {
+    return JSON.parse(localStorage.getItem("orderHistory")) || [];
 }
 
 init();
