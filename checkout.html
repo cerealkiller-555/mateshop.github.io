@@ -14,14 +14,32 @@
 <body>
     <header>
         <div class="header">
-            <img src="images/cup(1).png" width="50" alt="Sip & Energize logo cup icon">
-            <h1>Sip & Energize</h1>
+            <a href="index.html" class="logo-link">
+                <img src="images/cup(1).png" width="50" alt="Sip & Energize logo cup icon">
+                <h1>Sip & Energize</h1>
+            </a>
         </div>
     </header>
     <main class="checkout-container">
         <h3>Complete Your Order</h3>
 
-        <div class="checkout-content">
+        <div class="checkout-content" id="checkout-content-wrapper">
+            <div id="empty-cart-message" class="checkout-message" style="display: none;">
+                <h4>Your cart is empty</h4>
+                <p>Looks like you haven't added anything to your cart yet.</p>
+                <a href="index.html">
+                    <button class="add-to-cart" type="button">Return to Shop</button>
+                </a>
+            </div>
+
+            <div id="order-success-message" class="checkout-message" style="display: none;">
+                <h4>Order Successful!</h4>
+                <p>Thank you for your purchase. We've sent a confirmation email to you.</p>
+                <a href="index.html">
+                    <button class="add-to-cart" type="button">Continue Shopping</button>
+                </a>
+            </div>
+
             <section id="checkout-cart-summary" class="checkout-summary" aria-label="Order summary">
                 <h4>Order Summary</h4>
                 <ol id="summary-list"></ol>
@@ -48,6 +66,13 @@
         </div>
     </main>
 
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function () {
+            emailjs.init("VxJ3ZKSmXHueBP3aw");
+        })();
+    </script>
     <script src="script.js"></script>
 </body>
 

@@ -1,10 +1,16 @@
 // ====== SETUP DATA ======
 
 // All products we sell in the store
-const products = [
-    { name: "Pipore 250G", price: 150 },
+let products = [
     { name: "Sara 1KG", price: 300 },
-    { name: "Royale 500G", price: 200 }
+    { name: "Yerba Madre Bottle", price: 150 },
+    { name: "Taragui Yerba Mate 500G", price: 600 },
+    { name: "Taragui Yerba Mate 1KG", price: 850 },
+    { name: "Kharta Yerba Mate 250G", price: 150 },
+    { name: "Bombilla straw", price: 100 },
+    { name: "Rosamonte Yerba Mate 500G", price: 545 },
+    { name: "Yerba Gourd", price: 800 }
+
 ];
 
 // User's shopping cart (empty when page loads)
@@ -40,6 +46,29 @@ function saveCart() {
     } catch (e) {
         // ignore storage failures
     }
+}
+
+// ====== TOAST NOTIFICATION ======
+function showToast(message) {
+    let container = document.getElementById("toast-container");
+    if (!container) return;
+
+    let toast = document.createElement("div");
+    toast.className = "toast";
+    toast.innerText = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add("show");
+    }, 10);
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
 }
 
 // ====== CART RENDERING ======
@@ -142,6 +171,7 @@ function addToCart(productName) {
         cart.push({ name: product.name, price: product.price, quantity: 1 });
     }
     updateCartDisplay();
+    showToast(`${product.name} added to cart`);
 }
 
 function increaseQuantity(index) {
@@ -189,30 +219,30 @@ function submitOrder(event) {
 
     if (!orderForm) return;
 
-    const fullName = orderForm.fullName.value.trim();
-    const email = orderForm.email.value.trim();
-    const phone = orderForm.phone.value.trim();
-    const address = orderForm.address.value.trim();
+    let fullName = orderForm.fullName.value.trim();
+    let email = orderForm.email.value.trim();
+    let phone = orderForm.phone.value.trim();
+    let address = orderForm.address.value.trim();
 
     if (!fullName || !email || !phone || !address) {
         alert("Please fill in all fields.");
         return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         alert("Please enter a valid email address.");
         return;
     }
 
-    const phoneRegex = /^[0-9\s\-\+\(\)]{10,}$/;
+    let phoneRegex = /^[0-9\s\-\+\(\)]{10,}$/;
     if (!phoneRegex.test(phone)) {
         alert("Please enter a valid phone number (at least 10 digits).");
         return;
     }
 
-    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const orderData = {
+    let totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    let orderData = {
         fullName,
         email,
         phone,
@@ -222,16 +252,52 @@ function submitOrder(event) {
         orderDate: new Date().toISOString()
     };
 
+    // Add to Local History
     const orderHistory = JSON.parse(localStorage.getItem("orderHistory")) || [];
     orderHistory.push(orderData);
     localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
 
-    const orderId = "ORD-" + Date.now();
-    alert(`Order submitted successfully!\nOrder ID: ${orderId}\n\nWe'll send you an email confirmation at: ${email}`);
+    // EmailJS Integration
+    const templateParams = {
+        to_name: fullName,
+        to_email: email,
+        phone: phone,
+        address: address,
+        order_total: totalPrice,
+        order_items: cart.map(item => `${item.name} x ${item.quantity}`).join(", ")
+    };
 
-    cart = [];
-    updateCartDisplay();
-    if (orderForm) orderForm.reset();
+    if (typeof emailjs !== 'undefined') {
+        const orderSubmitButton = event ? event.target.querySelector('button[type="submit"]') : null;
+        if (orderSubmitButton) orderSubmitButton.innerText = "Sending Order...";
+
+        emailjs.send('service_w9xzhon', 'template_zlul4ds', templateParams)
+            .then(function (response) {
+                console.log('SUCCESS!', response.status, response.text);
+            }, function (error) {
+                console.log('FAILED...', error);
+                alert("Failed to send email. But order was received.");
+            }).finally(() => {
+                showSuccessMessage();
+            });
+    } else {
+        // Fallback if EmailJS fails to load
+        showSuccessMessage();
+    }
+
+    function showSuccessMessage() {
+        let successMsg = document.getElementById("order-success-message");
+        let summary = document.getElementById("checkout-cart-summary");
+        let form = document.getElementById("order-form");
+
+        if (successMsg) successMsg.style.display = "block";
+        if (summary) summary.style.display = "none";
+        if (form) form.style.display = "none";
+
+        cart = [];
+        updateCartDisplay();
+        if (orderForm) orderForm.reset();
+    }
 }
 
 // ====== INIT ======
@@ -239,6 +305,18 @@ function init() {
     loadCart();
     updateCartDisplay();
     renderCheckoutSummary();
+
+    // Check if we are on checkout page and cart is empty
+    let isCheckoutPage = !!document.getElementById("checkout-cart-summary");
+    if (isCheckoutPage && cart.length === 0) {
+        let emptyMsg = document.getElementById("empty-cart-message");
+        let summary = document.getElementById("checkout-cart-summary");
+        let form = document.getElementById("order-form");
+
+        if (emptyMsg) emptyMsg.style.display = "block";
+        if (summary) summary.style.display = "none";
+        if (form) form.style.display = "none";
+    }
 
     if (cartToggleButton) {
         cartToggleButton.addEventListener("click", (event) => {
