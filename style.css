@@ -63,11 +63,29 @@ body {
     letter-spacing: -0.5px;
 }
 
+.header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.login-link-nav {
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.login-link-nav:hover {
+    color: var(--accent);
+}
+
 .icon-button {
     background: transparent;
     border: none;
     padding: 0;
-    margin-left: auto;
     cursor: pointer;
     position: relative;
     transition: transform 0.2s ease;
@@ -164,6 +182,66 @@ body {
     min-width: 26px;
     text-align: center;
     font-weight: 500;
+}
+
+/* ====== INFO BANNER ====== */
+.info-banner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 60px 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-top: 80px;
+    margin-bottom: 40px;
+}
+
+.info-item {
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.info-item:hover {
+    transform: translateY(-5px);
+}
+
+.info-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+    filter: brightness(0) saturate(100%) invert(18%) sepia(14%) saturate(1443%) hue-rotate(69deg) brightness(97%) contrast(92%);
+}
+
+.info-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--text-main);
+}
+
+.info-item p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.info-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.2s, color 0.2s;
+}
+
+.info-link:hover {
+    color: var(--accent-hover);
+    border-bottom: 2px solid var(--accent);
 }
 
 /* ====== PRODUCTS LAYOUT ====== */
@@ -437,6 +515,83 @@ body {
     transform: translateY(0);
 }
 
+/* ====== INFO PAGES ====== */
+.info-page-content {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.info-hero {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.info-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: var(--text-main);
+    letter-spacing: -2px;
+}
+
+.info-hero p {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.info-card {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.info-card h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.info-card ul {
+    padding-left: 20px;
+    margin-top: 20px;
+}
+
+.info-card li {
+    margin-bottom: 12px;
+    color: var(--text-muted);
+}
+
+.important-note {
+    background: #FDF4E3;
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    border-left: 5px solid #D9A036;
+    margin-top: 40px;
+}
+
+.important-note h3 {
+    margin-top: 0;
+    color: #8B651B;
+}
+
+.important-note p {
+    margin-bottom: 0;
+    color: #8B651B;
+    font-weight: 500;
+}
+
 /* ====== FOOTER ====== */
 .site-footer {
     background-color: var(--text-main);
@@ -472,11 +627,12 @@ body {
     color: rgba(253, 251, 247, 0.7);
     text-decoration: none;
     margin-bottom: 12px;
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.2s;
 }
 
 .footer-section a:hover {
     color: var(--card-bg);
+    transform: translateX(5px);
 }
 
 .footer-bottom {

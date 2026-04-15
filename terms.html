@@ -6,11 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="images/cup(1).png">
-    <title>Login | Sip & Energize</title>
-    <meta name="description" content="Log in to your Sip & Energize account to manage orders and preferences.">
+    <title>Terms & Conditions | Sip & Energize</title>
 </head>
 
 <body>
@@ -31,47 +30,23 @@
     </header>
 
     <main>
-        <section id="cart-panel" class="cart" aria-label="Shopping cart">
-            <div id="cart-items">
-                <p>No items yet</p>
+        <article class="info-page-content">
+            <div class="info-hero">
+                <h1>Terms & Conditions</h1>
+                <p>Welcome to Sip & Energize. By using our site, you agree to these terms.</p>
             </div>
 
-            <p>Subtotal: <span id="subtotal">0</span> EGP</p>
+            <div class="info-card" style="margin-bottom: 40px; width: 100%;">
+                <h2>1. Use of Site</h2>
+                <p>By accessing the website, you warrant and represent to the website owner that you are legally entitled to do so and to make use of information made available via the website.</p>
+                
+                <h2>2. Trademarks</h2>
+                <p>The trademarks, names, logos and service marks displayed on this website are registered and unregistered trademarks of the website owner.</p>
 
-            <a href="checkout.html">
-                <button class="add-to-cart" type="button">Checkout</button>
-            </a>
-        </section>
-
-        <div class="login-container">
-            <div class="login-card">
-                <div class="login-header">
-                    <h2>Welcome Back</h2>
-                    <p>Enter your credentials to access your account</p>
-                </div>
-                <form id="login-form" class="login-form">
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="hello@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="••••••••" required>
-                    </div>
-                    <div class="login-options">
-                        <label class="remember-me">
-                            <input type="checkbox" name="remember">
-                            <span>Remember me</span>
-                        </label>
-                        <a href="#" class="forgot-password">Forgot password?</a>
-                    </div>
-                    <button type="submit" class="login-button">Sign In</button>
-                    <div class="login-footer">
-                        <p>Don't have an account? <a href="#">Create account</a></p>
-                    </div>
-                </form>
+                <h2>3. Accuracy of Information</h2>
+                <p>While we endeavor to ensure that all information on this website is correct, we do not warrant its completeness or accuracy.</p>
             </div>
-        </div>
+        </article>
     </main>
 
     <footer class="site-footer">
@@ -103,7 +78,6 @@
             <p>&copy; 2026 Sip & Energize. All rights reserved.</p>
         </div>
     </footer>
-
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
     <script src="script.js"></script>
 </body>
