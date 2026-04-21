@@ -4,6 +4,7 @@
 const API_BASE_URL = 'http://localhost:5000/api'; // Change this to your deployed server URL
 const AUTH_TOKEN_KEY = 'auth_token';
 const USER_DATA_KEY = 'user_data';
+const LOCAL_USERS_KEY = 'mateshop_local_users';
 
 // All products we sell in the store
 let products = [
@@ -335,6 +336,109 @@ function saveUserData(userData) {
     localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
 }
 
+function normalizeEmail(email) {
+    return email.trim().toLowerCase();
+}
+
+function loadLocalUsers() {
+    try {
+        const storedUsers = localStorage.getItem(LOCAL_USERS_KEY);
+        const parsedUsers = storedUsers ? JSON.parse(storedUsers) : [];
+        return Array.isArray(parsedUsers) ? parsedUsers : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveLocalUsers(users) {
+    localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users));
+}
+
+function createLocalSession(user) {
+    return {
+        success: true,
+        token: `local-auth-${user.id}-${Date.now()}`,
+        user: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            firstName: user.firstName || '',
+            lastName: user.lastName || ''
+        }
+    };
+}
+
+function registerLocalUser({ username, email, password, firstName, lastName }) {
+    const users = loadLocalUsers();
+    const normalizedEmail = normalizeEmail(email);
+    const normalizedUsername = username.trim().toLowerCase();
+
+    const existingUser = users.find((user) =>
+        user.email === normalizedEmail || user.username.toLowerCase() === normalizedUsername
+    );
+
+    if (existingUser) {
+        return {
+            success: false,
+            message: 'Email or username already exists'
+        };
+    }
+
+    const newUser = {
+        id: `local-user-${Date.now()}`,
+        username: username.trim(),
+        email: normalizedEmail,
+        password,
+        firstName: firstName.trim(),
+        lastName: lastName.trim()
+    };
+
+    users.push(newUser);
+    saveLocalUsers(users);
+
+    return createLocalSession(newUser);
+}
+
+function loginLocalUser({ email, password }) {
+    const users = loadLocalUsers();
+    const normalizedEmail = normalizeEmail(email);
+
+    const user = users.find((storedUser) => storedUser.email === normalizedEmail);
+
+    if (!user || user.password !== password) {
+        return {
+            success: false,
+            message: 'Invalid credentials'
+        };
+    }
+
+    return createLocalSession(user);
+}
+
+async function requestAuth(endpoint, payload) {
+    try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        return await response.json();
+    } catch (error) {
+        if (endpoint === '/auth/register') {
+            return registerLocalUser(payload);
+        }
+
+        if (endpoint === '/auth/login') {
+            return loginLocalUser(payload);
+        }
+
+        throw error;
+    }
+}
+
 // Logout user
 function logout() {
     localStorage.removeItem(AUTH_TOKEN_KEY);
@@ -379,15 +483,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const errorDiv = document.getElementById('login-error');
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
+                const data = await requestAuth('/auth/login', { email, password });
 
                 if (data.success) {
                     saveAuthToken(data.token);
@@ -402,7 +498,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                errorDiv.textContent = 'Error connecting to server. Make sure backend is running.';
+                errorDiv.textContent = 'Login failed. Please try again.';
                 errorDiv.style.display = 'block';
             }
         });
@@ -421,21 +517,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const errorDiv = document.getElementById('register-error');
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        username,
-                        email,
-                        password,
-                        firstName,
-                        lastName
-                    })
+                const data = await requestAuth('/auth/register', {
+                    username,
+                    email,
+                    password,
+                    firstName,
+                    lastName
                 });
-
-                const data = await response.json();
 
                 if (data.success) {
                     saveAuthToken(data.token);
@@ -450,7 +538,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (error) {
                 console.error('Registration error:', error);
-                errorDiv.textContent = 'Error connecting to server. Make sure backend is running.';
+                errorDiv.textContent = 'Registration failed. Please try again.';
                 errorDiv.style.display = 'block';
             }
         });
