@@ -102,8 +102,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="login-password">Password</label>
-                                <input type="password" id="login-password" name="password" placeholder="Enter your password"
-                                    required>
+                                <div class="password-field">
+                                    <input type="password" id="login-password" name="password"
+                                        placeholder="Enter your password" required>
+                                    <button type="button" class="password-toggle" data-password-toggle
+                                        data-target="login-password" aria-label="Show password"
+                                        aria-pressed="false">Show</button>
+                                </div>
                             </div>
                             <div class="login-options">
                                 <label class="remember-me">
@@ -139,8 +144,13 @@
                                 </div>
                                 <div class="form-group form-group-full">
                                     <label for="reg-password">Password</label>
-                                    <input type="password" id="reg-password" name="password"
-                                        placeholder="Create a strong password" required>
+                                    <div class="password-field">
+                                        <input type="password" id="reg-password" name="password"
+                                            placeholder="Create a strong password" required>
+                                        <button type="button" class="password-toggle" data-password-toggle
+                                            data-target="reg-password" aria-label="Show password"
+                                            aria-pressed="false">Show</button>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="reg-firstName">First Name</label>

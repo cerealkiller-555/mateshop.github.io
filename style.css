@@ -952,6 +952,10 @@ body {
     margin-bottom: 20px;
 }
 
+.password-field {
+    position: relative;
+}
+
 .login-form label {
     display: block;
     font-size: 0.9rem;
@@ -969,6 +973,29 @@ body {
     font-size: 1rem;
     transition: all 0.2s;
     box-sizing: border-box;
+}
+
+.password-field input {
+    padding-right: 88px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px 6px;
+}
+
+.password-toggle:hover {
+    color: var(--accent-hover);
 }
 
 .login-form input:focus {

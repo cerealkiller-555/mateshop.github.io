@@ -458,6 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const loginError = document.getElementById('login-error');
     const registerError = document.getElementById('register-error');
     const authTabs = document.querySelectorAll('.auth-tab');
+    const passwordToggles = document.querySelectorAll('[data-password-toggle]');
 
     function setAuthView(view) {
         const showLogin = view === 'login';
@@ -505,6 +506,20 @@ document.addEventListener('DOMContentLoaded', function () {
     authTabs.forEach((tab) => {
         tab.addEventListener('click', () => {
             setAuthView(tab.dataset.authTarget);
+        });
+    });
+
+    passwordToggles.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            const targetId = toggle.dataset.target;
+            const passwordInput = targetId ? document.getElementById(targetId) : null;
+            if (!passwordInput) return;
+
+            const shouldShow = passwordInput.type === 'password';
+            passwordInput.type = shouldShow ? 'text' : 'password';
+            toggle.textContent = shouldShow ? 'Hide' : 'Show';
+            toggle.setAttribute('aria-label', shouldShow ? 'Hide password' : 'Show password');
+            toggle.setAttribute('aria-pressed', String(shouldShow));
         });
     });
 
