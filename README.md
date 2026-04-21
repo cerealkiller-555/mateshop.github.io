@@ -1,80 +1,189 @@
-# Sip & Energize - Yerba Mate Product Store
+# Sip & Energize
 
-A simple, responsive e-commerce product page for Yerba Mate products with shopping cart functionality.
+Sip & Energize is a small multi-page yerba mate storefront built with static HTML, CSS, and JavaScript, with an optional Node.js + MongoDB backend for authentication and order APIs.
 
-## Description
+The frontend works as a normal static site, and the project also includes a backend folder for server-side auth and order storage when you want a full stack setup.
 
-This project is a front-end web application that displays Yerba Mate products, allows users to add items to a shopping cart, manage quantities, and proceed to checkout. The application features a clean, dark-themed UI with smooth animations and responsive design.
+## What The Project Includes
 
-## Features
+- Product storefront with add-to-cart actions
+- Cart panel with quantity controls and subtotal
+- Checkout page with shipping form and order summary
+- Login and registration page
+- Local browser-based auth fallback when the backend is unavailable
+- Informational pages like About, Benefits, Brewing Guide, Contact, Shipping, Refund, Privacy, and Terms
+- Optional Express API with MongoDB models for users and orders
 
-- **Product Display**: Showcase multiple Yerba Mate products with images, titles, and prices
-- **Shopping Cart**: Add products to cart, adjust quantities, view subtotal
-- **Cart Persistence**: Cart contents are saved in browser localStorage
-- **Checkout Form**: Basic checkout form with validation (name, phone, address)
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
-- **Accessibility**: Proper ARIA labels, keyboard navigation, and semantic HTML
+## Tech Stack
 
-## Technologies Used
+### Frontend
 
-- **HTML5**: Semantic markup and structure
-- **CSS3**: Custom styling with flexbox, transitions, and responsive design
-- **JavaScript (ES6+)**: DOM manipulation, event handling, and localStorage
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- localStorage for cart, auth session, local users, and order history
+- EmailJS for checkout email sending
+
+### Backend
+
+- Node.js
+- Express
+- MongoDB with Mongoose
+- JWT authentication
+- bcryptjs for password hashing
 
 ## Project Structure
 
+```text
+mateshop.github.io/
+├── index.html
+├── login.html
+├── checkout.html
+├── about.html
+├── benefits.html
+├── brewing-guide.html
+├── contact.html
+├── shipping.html
+├── refund.html
+├── privacy.html
+├── terms.html
+├── style.css
+├── script.js
+├── images/
+├── QUICK_START.md
+├── AUTHENTICATION_SETUP.md
+├── CANVA_DESIGN_PROMPT.md
+├── README.md
+└── server/
+    ├── server.js
+    ├── routes/
+    ├── models/
+    ├── middleware/
+    ├── package.json
+    └── README.md
 ```
-Product-Card/
-├── index.html          # Main product listing page
-├── checkout.html       # Checkout form page
-├── style.css           # Main stylesheet
-├── script.js           # JavaScript functionality
-├── images/             # Product images
-├── Project-Notes.md    # Development notes and roadmap
-└── README.md           # This file
+
+## Frontend Pages
+
+- `index.html`: main shop page with products, cart access, and protected shop entry
+- `login.html`: login and registration forms
+- `checkout.html`: order summary, shipping form, and success/empty states
+- `about.html`, `benefits.html`, `brewing-guide.html`, `contact.html`: content and marketing pages
+- `shipping.html`, `refund.html`, `privacy.html`, `terms.html`: support and policy pages
+
+## How The Frontend Works
+
+Most interactive behavior lives in `script.js`.
+
+### Cart
+
+- Products are defined in a JavaScript array
+- Cart items are stored in `localStorage` under `sipCart`
+- The cart panel supports adding items, changing quantities, and showing the subtotal
+- Cart contents persist across page refreshes
+
+### Authentication
+
+- The app stores session data in `localStorage`
+- `auth_token` stores the current token
+- `user_data` stores the logged-in user object
+- The frontend first tries the backend API at `http://localhost:5000/api`
+- If the backend cannot be reached, login and registration fall back to local browser storage using `mateshop_local_users`
+
+### Checkout
+
+- The checkout form validates name, email, phone, and address
+- Orders are stored locally in `orderHistory`
+- If EmailJS is available, the app sends a confirmation email
+- If EmailJS is unavailable, the order still completes in the UI
+
+## Running The Frontend
+
+Because the site is static, you can open the HTML files directly in a browser. Using a local server is better for testing.
+
+### Option 1: Open Directly
+
+Open `login.html` or `index.html` in your browser.
+
+### Option 2: Run A Local Static Server
+
+From the project root:
+
+```bash
+python3 -m http.server 4173
 ```
 
-## How to Run
+Then open:
 
-1. Clone or download the project files
-2. Open `index.html` in a modern web browser
-3. The application will run locally without needing a server
+```text
+http://127.0.0.1:4173/login.html
+```
 
-For development:
-- Open the files in a code editor (like VS Code)
-- Make changes and refresh the browser to see updates
-- Use browser developer tools to inspect and debug
+## Running The Backend
 
-## Usage
+The backend is optional, but if you want real API-based authentication and order storage:
 
-1. **Browse Products**: View available Yerba Mate products on the main page
-2. **Add to Cart**: Click "Add to Cart" buttons to add products
-3. **Manage Cart**: Click the cart icon to view/edit cart contents
-4. **Adjust Quantities**: Use +/- buttons to change item quantities
-5. **Checkout**: Click "Checkout" to proceed to the order form
-6. **Submit Order**: Fill out the form and submit your order
+```bash
+cd server
+npm install
+```
 
-## Development Roadmap
+Create a `.env` file inside `server/`:
 
-For a detailed development plan and implementation steps, see [Project-Notes.md](Project-Notes.md). The roadmap includes:
+```env
+PORT=5000
+MONGODB_URI=your_mongo_connection_string
+JWT_SECRET=change_this_to_a_strong_random_string
+NODE_ENV=development
+```
 
-- Backend API development
-- Database integration
-- Enhanced validation and security
-- Testing and deployment
-- Additional features like search, filtering, and admin dashboard
+Start the server:
 
-## Browser Support
+```bash
+npm run dev
+```
 
-- Chrome 80+
-- Firefox 75+
-- Safari 13+
-- Edge 80+
+The API will be available at:
 
-## Contributing
+```text
+http://localhost:5000/api
+```
 
-This is a learning project. Feel free to fork and experiment with improvements!
+## Backend API Overview
+
+### Auth Routes
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/verify`
+- `POST /api/auth/logout`
+
+### Order Routes
+
+- `GET /api/orders`
+- `POST /api/orders`
+- `GET /api/orders/:orderId`
+
+## Important Notes
+
+- `index.html` currently checks for `auth_token` in `localStorage` and redirects unauthenticated users to `login.html`
+- The frontend auth fallback is useful for static hosting, demos, and local testing without the backend
+- The real backend still depends on MongoDB and a valid `JWT_SECRET`
+
+## Related Docs
+
+- `QUICK_START.md`: quick setup guide
+- `AUTHENTICATION_SETUP.md`: auth and backend setup details
+- `server/README.md`: backend-specific documentation
+
+## Current Status
+
+This project is best described as a hybrid storefront:
+
+- usable as a static frontend demo
+- partially connected to a real backend
+- suitable for learning, prototyping, and iterative improvement
 
 ## License
 
-This project is for educational purposes.
+This project is for educational and personal project use.
