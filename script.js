@@ -1,7 +1,9 @@
 // ====== SETUP DATA ======
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:5000/api'; // Change this to your deployed server URL
+const API_BASE_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:5000/api'
+    : '/api';
 const AUTH_TOKEN_KEY = 'auth_token';
 const USER_DATA_KEY = 'user_data';
 const LOCAL_USERS_KEY = 'mateshop_local_users';
@@ -11,13 +13,19 @@ const LEGACY_CART_KEY = 'sipCart';
 // All products we sell in the store
 let products = [
     { name: "Sara 1KG", price: 300 },
-    { name: "Yerba Madre Bottle", price: 150 },
-    { name: "Taragui Yerba Mate 500G", price: 600 },
+    { name: "Yerba Madre Bottle", price: 250 },
+    { name: "Taragui Yerba Mate 500G", price: 400 },
     { name: "Taragui Yerba Mate 1KG", price: 850 },
     { name: "Kharta Yerba Mate 250G", price: 150 },
     { name: "Bombilla straw", price: 100 },
     { name: "Rosamonte Yerba Mate 500G", price: 545 },
-    { name: "Yerba Gourd", price: 800 }
+    { name: "Yerba Gourd", price: 800 },
+    { name: "Cooler.co Unsweet 473mL", price: 500 },
+    { name: "Cooler.co The OG Flavor 473mL", price: 450 },
+    { name: "Cooler.co PowerPeach 473mL", price: 500 },
+    { name: "Cooler.co MightyMint 473mL", price: 500 },
+    { name: "Cooler.co bluebalance 473mL", price: 500 },
+    { name: "Cooler.co BerryActive 473mL", price: 500 }
 
 ];
 

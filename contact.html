@@ -10,6 +10,22 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="images/cup(1).png">
     <title>Contact Us | Sip & Energize</title>
+    <meta name="description"
+        content="Contact Sip & Energize for product questions, order help, or support with Yerba Mate recommendations and shipping.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mateshop.github.io/contact.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Contact Us | Sip & Energize">
+    <meta property="og:description"
+        content="Contact Sip & Energize for product questions, order help, or support with Yerba Mate recommendations and shipping.">
+    <meta property="og:url" content="https://mateshop.github.io/contact.html">
+    <meta property="og:site_name" content="Sip & Energize">
+    <meta property="og:image" content="https://mateshop.github.io/images/brewing-hero.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Contact Us | Sip & Energize">
+    <meta name="twitter:description"
+        content="Contact Sip & Energize for product questions, order help, or support with Yerba Mate recommendations and shipping.">
+    <meta name="twitter:image" content="https://mateshop.github.io/images/brewing-hero.png">
 </head>
 
 <body>
@@ -30,6 +46,16 @@
     </header>
 
     <main>
+        <section id="cart-panel" class="cart" aria-label="Shopping cart">
+            <div id="cart-items">
+                <p>No items yet</p>
+            </div>
+            <p>Subtotal: <span id="subtotal">0</span> EGP</p>
+            <a href="checkout.html">
+                <button class="add-to-cart" type="button">Checkout</button>
+            </a>
+        </section>
+
         <article class="info-page-content">
             <div class="info-hero">
                 <h1>Contact Us</h1>
@@ -97,9 +123,9 @@
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
     <script src="script.js"></script>
     <script>
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            alert('Thank you for your message! We will get back to you soon.');
+            showToast('Thanks for reaching out. We will get back to you soon.');
             this.reset();
         });
     </script>
