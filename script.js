@@ -1,9 +1,7 @@
 // ====== SETUP DATA ======
 
 // API Configuration
-const API_BASE_URL = window.location.hostname === 'localhost'
-    ? 'http://localhost:5000/api'
-    : '/api';
+const API_BASE_URL = 'http://localhost:5000/api'; // Change this to your deployed server URL
 const AUTH_TOKEN_KEY = 'auth_token';
 const USER_DATA_KEY = 'user_data';
 const LOCAL_USERS_KEY = 'mateshop_local_users';
@@ -13,8 +11,8 @@ const LEGACY_CART_KEY = 'sipCart';
 // All products we sell in the store
 let products = [
     { name: "Sara 1KG", price: 300 },
-    { name: "Yerba Madre Bottle", price: 250 },
-    { name: "Taragui Yerba Mate 500G", price: 400 },
+    { name: "Yerba Madre Bottle", price: 150 },
+    { name: "Taragui Yerba Mate 500G", price: 600 },
     { name: "Taragui Yerba Mate 1KG", price: 850 },
     { name: "Kharta Yerba Mate 250G", price: 150 },
     { name: "Bombilla straw", price: 100 },
@@ -43,7 +41,7 @@ let summaryTotal = document.getElementById("summary-total");
 
 // ====== STORAGE ======
 function getCartStorageKey() {
-    const currentUser = getUserData();
+    let currentUser = getUserData();
     if (currentUser && currentUser.id) {
         return `sipCart_${currentUser.id}`;
     }
@@ -156,42 +154,6 @@ function showToast(message) {
     }, 3000);
 }
 
-function showUserAlert(message) {
-    window.alert(message);
-}
-
-function getFriendlyAuthMessage(message, mode = 'login') {
-    const normalizedMessage = (message || '').trim().toLowerCase();
-
-    if (normalizedMessage.includes('invalid credentials')) {
-        return 'Email or password is incorrect. Please check your details and try again.';
-    }
-
-    if (normalizedMessage.includes('please provide email and password')) {
-        return 'Please enter both your email address and password.';
-    }
-
-    if (normalizedMessage.includes('please provide username, email, and password')) {
-        return 'Please fill in username, email address, and password to continue.';
-    }
-
-    if (normalizedMessage.includes('email or username already exists')) {
-        return 'This email or username is already in use. Try signing in or choose different account details.';
-    }
-
-    if (normalizedMessage.includes('error logging in')) {
-        return 'We could not sign you in right now. Please try again in a moment.';
-    }
-
-    if (normalizedMessage.includes('error registering user')) {
-        return 'We could not create your account right now. Please try again in a moment.';
-    }
-
-    return mode === 'register'
-        ? 'We could not create your account. Please review your details and try again.'
-        : 'We could not sign you in. Please review your details and try again.';
-}
-
 // ====== CART RENDERING ======
 function updateCartDisplay() {
     if (cartCount) {
@@ -206,7 +168,7 @@ function updateCartDisplay() {
     cartItems.innerHTML = "";
 
     if (cart.length === 0) {
-        cartItems.innerHTML = "<p>Your cart is empty. Add something you love to get started.</p>";
+        cartItems.innerHTML = "<p>No items yet</p>";
         subtotal.innerText = "0";
         return;
     }
@@ -292,7 +254,7 @@ function addToCart(productName) {
         cart.push({ name: product.name, price: product.price, quantity: 1 });
     }
     updateCartDisplay();
-    showToast(`${product.name} was added to your cart.`);
+    showToast(`${product.name} added to cart`);
 }
 
 function increaseQuantity(index) {
@@ -334,7 +296,7 @@ function submitOrder(event) {
     if (event) event.preventDefault();
 
     if (cart.length === 0) {
-        showUserAlert("Your cart is empty. Add at least one item before placing an order.");
+        alert("Your cart is empty.");
         return;
     }
 
@@ -346,19 +308,19 @@ function submitOrder(event) {
     let address = orderForm.address.value.trim();
 
     if (!fullName || !email || !phone || !address) {
-        showUserAlert("Please complete your full name, email, phone number, and address before submitting the order.");
+        alert("Please fill in all fields.");
         return;
     }
 
     let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        showUserAlert("Please enter a valid email address so we can confirm your order.");
+        alert("Please enter a valid email address.");
         return;
     }
 
     let phoneRegex = /^[0-9\s\-\+\(\)]{10,}$/;
     if (!phoneRegex.test(phone)) {
-        showUserAlert("Please enter a valid phone number with at least 10 digits.");
+        alert("Please enter a valid phone number (at least 10 digits).");
         return;
     }
 
@@ -397,7 +359,7 @@ function submitOrder(event) {
                 console.log('SUCCESS!', response.status, response.text);
             }, function (error) {
                 console.log('FAILED...', error);
-                showUserAlert("Your order was received, but we could not send the confirmation email right now.");
+                alert("Failed to send email. But order was received.");
             }).finally(() => {
                 showSuccessMessage();
             });
@@ -564,7 +526,7 @@ async function requestAuth(endpoint, payload) {
 function logout() {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(USER_DATA_KEY);
-    showToast('You have been logged out successfully.');
+    showToast('Logged out successfully');
     window.location.href = 'login.html';
 }
 
@@ -666,17 +628,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     saveAuthToken(data.token);
                     saveUserData(data.user);
                     moveGuestCartToUserCart();
-                    showToast('Welcome back. Redirecting you to the shop...');
+                    showToast('Login successful! Redirecting...');
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
                 } else {
-                    errorDiv.textContent = getFriendlyAuthMessage(data.message, 'login');
+                    errorDiv.textContent = data.message || 'Login failed';
                     errorDiv.hidden = false;
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                errorDiv.textContent = 'We could not sign you in right now. Please try again in a moment.';
+                errorDiv.textContent = 'Login failed. Please try again.';
                 errorDiv.hidden = false;
             }
         });
@@ -707,17 +669,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     saveAuthToken(data.token);
                     saveUserData(data.user);
                     moveGuestCartToUserCart();
-                    showToast('Your account is ready. Redirecting you to the shop...');
+                    showToast('Account created! Redirecting...');
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
                 } else {
-                    errorDiv.textContent = getFriendlyAuthMessage(data.message, 'register');
+                    errorDiv.textContent = data.message || 'Registration failed';
                     errorDiv.hidden = false;
                 }
             } catch (error) {
                 console.error('Registration error:', error);
-                errorDiv.textContent = 'We could not create your account right now. Please try again in a moment.';
+                errorDiv.textContent = 'Registration failed. Please try again.';
                 errorDiv.hidden = false;
             }
         });
