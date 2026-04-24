@@ -11,20 +11,19 @@ const LEGACY_CART_KEY = 'sipCart';
 // All products we sell in the store
 let products = [
     { name: "Sara 1KG", price: 300 },
-    { name: "Yerba Madre Bottle", price: 150 },
-    { name: "Taragui Yerba Mate 500G", price: 600 },
+    { name: "Yerba Madre Bottle", price: 250 },
+    { name: "Taragui Yerba Mate 500G", price: 400 },
     { name: "Taragui Yerba Mate 1KG", price: 850 },
     { name: "Kharta Yerba Mate 250G", price: 150 },
     { name: "Bombilla straw", price: 100 },
     { name: "Rosamonte Yerba Mate 500G", price: 545 },
     { name: "Yerba Gourd", price: 800 },
-    { name: "Cooler.co Unsweet 473mL", price: 500 },
-    { name: "Cooler.co The OG Flavor 473mL", price: 450 },
-    { name: "Cooler.co PowerPeach 473mL", price: 500 },
-    { name: "Cooler.co MightyMint 473mL", price: 500 },
-    { name: "Cooler.co bluebalance 473mL", price: 500 },
-    { name: "Cooler.co BerryActive 473mL", price: 500 }
-
+    { name: "Cooler Co Unsweet 473mL", price: 500 },
+    { name: "Cooler Co The OG Flavor 473mL", price: 450 },
+    { name: "Cooler Co PowerPeach 473mL", price: 500 },
+    { name: "Cooler Co MightyMint 473mL", price: 500 },
+    { name: "Cooler Co bluebalance 473mL", price: 500 },
+    { name: "Cooler Co BerryActive 473mL", price: 500 }
 ];
 
 // User's shopping cart (empty when page loads)
@@ -526,8 +525,29 @@ async function requestAuth(endpoint, payload) {
 function logout() {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(USER_DATA_KEY);
+    localStorage.removeItem(GUEST_CART_KEY); // Clear guest cart on logout to prevent leakage
+    cart = []; // Reset in-memory cart
+    updateCartDisplay(); // Sync UI
     showToast('Logged out successfully');
     window.location.href = 'login.html';
+}
+
+function updateHeader() {
+    const authLinks = document.querySelectorAll('.login-link-nav');
+    const authenticated = isAuthenticated();
+
+    authLinks.forEach(link => {
+        if (authenticated) {
+            link.innerText = 'Logout';
+            link.href = '#';
+            link.id = 'logout-btn'; // Ensure it has the ID for the logout listener
+            link.classList.add('is-logged-in');
+        } else {
+            link.innerText = 'Login';
+            link.href = 'login.html';
+            link.classList.remove('is-logged-in');
+        }
+    });
 }
 
 // Handle Login Form Submission
@@ -628,6 +648,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     saveAuthToken(data.token);
                     saveUserData(data.user);
                     moveGuestCartToUserCart();
+                    loadCart(); // Refresh cart data for the logged-in user
+                    updateCartDisplay();
                     showToast('Login successful! Redirecting...');
                     setTimeout(() => {
                         window.location.href = 'index.html';
@@ -669,6 +691,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     saveAuthToken(data.token);
                     saveUserData(data.user);
                     moveGuestCartToUserCart();
+                    loadCart(); // Refresh cart data for the new user
+                    updateCartDisplay();
                     showToast('Account created! Redirecting...');
                     setTimeout(() => {
                         window.location.href = 'index.html';
@@ -692,8 +716,18 @@ function init() {
     updateCartDisplay();
     renderCheckoutSummary();
     initOutsideClickListener();
+    updateHeader();
 
-    // Handle logout button
+    // Handle logout button delegation
+    document.addEventListener('click', (e) => {
+        if (e.target && (e.target.id === 'logout-btn' || e.target.classList.contains('logout-action'))) {
+            if (isAuthenticated()) {
+                e.preventDefault();
+                logout();
+            }
+        }
+    });
+
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
@@ -735,11 +769,6 @@ function init() {
     if (orderForm) {
         orderForm.addEventListener("submit", submitOrder);
     }
-}
-
-// Retrieve order history from localStorage
-function getOrderHistory() {
-    return JSON.parse(localStorage.getItem("orderHistory")) || [];
 }
 
 init();
